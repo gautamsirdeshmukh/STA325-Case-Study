@@ -8,7 +8,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Load libraries and data
+## Load libraries and data
 ```{r echo=FALSE, message=FALSE}
 library(tidyverse)
 train <- read_csv("data-train.csv")
@@ -29,7 +29,7 @@ train <- read_csv("data-train.csv")
 
 ## Apply to test data
 
-```{r}
+```{r test-data}
 
 ```
 
