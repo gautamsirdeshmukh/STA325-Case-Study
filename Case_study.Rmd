@@ -12,20 +12,60 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r echo=FALSE, message=FALSE}
 library(tidyverse)
 train <- read_csv("data-train.csv")
+test <- read_csv("data-test.csv")
+train
+cor(train)
+test
 ```
 
 ## Exploratory Data Analysis
 
 ```{r eda}
+# We transform the 'Fr' variable using the sigmoid function so that this variable 
+# will be within a finite range.
 
+train1 <- train %>%
+  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr))) %>%
+  subset(select = c(1:3, 8, 4:7))
+
+train1
+cor(train1)
+
+# R_moment_2 is almost perfectly correlated with R_moment_3 and R_moment 4.
 ```
+
+We will try to create these 4 models:
+
+- **Response**: R_moment_1 & **Predictors (Main Effects)**: St, Re, Fr_sigmoid
+
+We will attempt to use a combination of subset selection, polynomial, 
+transformation, and interaction variables.
+
+- **Response**: R_moment_2 & **Predictors (Main Effects)**: St, Re, Fr_sigmoid, R_moment_1
+
+We will attempt to use a combination of subset selection, polynomial, 
+transformation, and interaction variables. We will also include R_moment_1 since
+it is has significant positive relationship with R_moment_2 (~0.63).
+
+- **Response**: R_moment_3 & **Predictors (Main Effects)**: R_moment_2
+
+We know that R_moment_2 is almost perfectly correlated (>0.99) with R_moment_3, 
+so only using one predictor variable is enough. We try to avoid overfitting by
+using only R_moment_2 as our only predictor to predict R_moment_3. We will
+attempt to use polynomial and transformation variables.
+
+- **Response**: R_moment_4 & **Predictors (Main Effects)**: R_moment_2, R_moment_3
+
+Same reasoning - R_moment_2 and R_moment_3 are almost perfectly correlated
+with R_moment_4. We will only use these 2 predictors and will attempt to use
+both transformation and interaction variables (since R_moment_2 and R_moment_3
+are also highly correlated to each other).
 
 ## Predictive models
 
 ```{r predictive-models}
 
 ```
-
 
 ## Apply to test data
 
