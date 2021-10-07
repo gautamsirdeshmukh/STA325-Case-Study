@@ -47,6 +47,16 @@ ggplot(data = train1, mapping = aes(x = R_moment_1)) + geom_histogram()
 ggplot(data = train1, mapping = aes(x = R_moment_2)) + geom_histogram()
 ggplot(data = train1, mapping = aes(x = R_moment_3)) + geom_histogram()
 ggplot(data = train1, mapping = aes(x = R_moment_4)) + geom_histogram()
+
+ggplot(data = train1, mapping = aes(x = log(St), y = R_moment_1)) + geom_point()
+
+train1 <- train1 %>%
+  mutate(Re_new = case_when(Re == 90 ~ "1",
+                            Re == 224 ~ "2",
+                            Re == 398 ~ "3"),
+         Fr_new = case_when(Fr == 0.052 ~ "1",
+                            Fr == 0.3 ~ "2",
+                            Fr == Inf ~ "3"))
 ```
 
 We will try to create these 4 models:
@@ -79,7 +89,9 @@ are also highly correlated to each other).
 ## Predictive models
 
 ```{r predictive-models}
-
+# Model 1 (linear)
+model1 <- lm(R_moment_1 ~ St + Re_new + Fr_new, data = train1)
+summary(model1)
 ```
 
 ## Apply to test data
