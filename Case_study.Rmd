@@ -57,6 +57,8 @@ train1 <- train1 %>%
          Fr_new = case_when(Fr == 0.052 ~ "1",
                             Fr == 0.3 ~ "2",
                             Fr == Inf ~ "3"))
+ggplot(data = train1, mapping = aes(x = St, y = R_moment_2)) + geom_point()
+ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = R_moment_2)) + geom_point()
 ```
 
 We will try to create these 4 models:
@@ -92,6 +94,20 @@ are also highly correlated to each other).
 # Model 1 (linear)
 model1 <- lm(R_moment_1 ~ St + Re_new + Fr_new, data = train1)
 summary(model1)
+
+# Model 1 interactions
+model1_int1 <- lm(R_moment_1 ~ St + Re_new + Fr_new + St*Re_new + St*Fr_new + Re_new*Fr_new, data = train1)
+summary(model1_int1)
+
+# Model 2 (linear)
+model2 <- lm(R_moment_2 ~ St + Re_new + Fr_new, data = train1)
+summary(model2)
+
+# Model 2 interactions
+model2_int1 <- lm(R_moment_2 ~ St + Re_new + Fr_new + St*Fr_new, data = train1)
+summary(model2_int1)
+library(car)
+vif(model2_int1)
 ```
 
 ## Apply to test data
