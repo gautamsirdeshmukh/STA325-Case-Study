@@ -39,6 +39,16 @@ test1
 # R_moment_2 is almost perfectly correlated with R_moment_3 and R_moment 4.
 ```
 
+```{r}
+ggplot(data = train1, mapping = aes(x = St)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = Re)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = Fr_sigmoid)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = R_moment_1)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = R_moment_2)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = R_moment_3)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = R_moment_4)) + geom_histogram()
+```
+
 We will try to create these 4 models:
 
 - **Response**: R_moment_1 & **Predictors (Main Effects)**: St, Re, Fr_sigmoid
