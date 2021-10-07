@@ -143,9 +143,7 @@ with(summary(model_1c), 1 - deviance / null.deviance) # R^2
 set.seed(100)
 cv_error_10_1c = rep(0, 10)
 for (i in 1:10) {
-  model_1c <- glm(M1 ~ St + Re_categorical + Fr_categorical + 
-                St * Re_categorical + St * Fr_categorical + Re_categorical * Fr_categorical, 
-              data = train1)
+  model_1c <- glm(M1_sigmoid ~ St + Re_categorical + Fr_categorical, data = train1)
   cv_error_10_1c[i] = cv.glm(train1, model_1c, K = 10)$delta[1]
   }
 sum(cv_error_10_1c) / 10 # MSE
@@ -163,7 +161,7 @@ with(summary(model_1d), 1 - deviance / null.deviance) # R^2
 set.seed(100)
 cv_error_10_1d = rep(0, 10)
 for (i in 1:10) {
-  model_1d <- glm(M1 ~ St + Re_categorical + Fr_categorical + 
+  model_1d <- glm(M1_sigmoid ~ St + Re_categorical + Fr_categorical + 
                 St * Re_categorical + St * Fr_categorical + Re_categorical * Fr_categorical, 
               data = train1)
   cv_error_10_1d[i] = cv.glm(train1, model_1d, K = 10)$delta[1]
