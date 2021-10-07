@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Load libraries and data
 ```{r echo=FALSE, message=FALSE}
 library(tidyverse)
+library(car)
 train <- read_csv("data-train.csv")
 test <- read_csv("data-test.csv")
 train
@@ -25,10 +26,7 @@ test
 # will be within a finite range.
 
 train1 <- train %>%
-  rename(M1 = R_moment_1, 
-         M2 = R_moment_2, 
-         M3 = R_moment_3, 
-         M4 = R_moment_4) %>%
+  rename(M1 = R_moment_1, M2 = R_moment_2, M3 = R_moment_3, M4 = R_moment_4) %>%
   mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr)),
          M1_sigmoid = 1 / ( 1 + exp(-M1)),
          M2_sigmoid = 1 / ( 1 + exp(-M2)),
@@ -39,15 +37,7 @@ train1
 cor(train1)
 
 test1 <- test %>%
-  rename(M1 = R_moment_1, 
-         M2 = R_moment_2, 
-         M3 = R_moment_3, 
-         M4 = R_moment_4) %>%
-  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr)),
-         M1_sigmoid = 1 / ( 1 + exp(-M1)),
-         M2_sigmoid = 1 / ( 1 + exp(-M2)),
-         M3_sigmoid = 1 / ( 1 + exp(-M3)),
-         M4_sigmoid = 1 / ( 1 + exp(-M4)))
+  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr)))
 
 test1
 
@@ -57,13 +47,18 @@ test1
 ```{r}
 ggplot(data = train1, mapping = aes(x = St)) + geom_histogram()
 ggplot(data = train1, mapping = aes(x = Re)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = Fr)) + geom_histogram()
 ggplot(data = train1, mapping = aes(x = Fr_sigmoid)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = R_moment_1)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = R_moment_2)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = R_moment_3)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = R_moment_4)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M1)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M1_sigmoid)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M2)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M2_sigmoid)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M3)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M3_sigmoid)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M4)) + geom_histogram()
+ggplot(data = train1, mapping = aes(x = M4_sigmoid)) + geom_histogram()
 
-ggplot(data = train1, mapping = aes(x = log(St), y = R_moment_1)) + geom_point()
+ggplot(data = train1, mapping = aes(x = log(St), y = M1)) + geom_point()
 
 train1 <- train1 %>%
   mutate(Re_new = case_when(Re == 90 ~ "1",
@@ -72,8 +67,8 @@ train1 <- train1 %>%
          Fr_new = case_when(Fr == 0.052 ~ "1",
                             Fr == 0.3 ~ "2",
                             Fr == Inf ~ "3"))
-ggplot(data = train1, mapping = aes(x = St, y = R_moment_2)) + geom_point()
-ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = R_moment_2)) + geom_point()
+ggplot(data = train1, mapping = aes(x = St, y = M2)) + geom_point()
+ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = M2)) + geom_point()
 ```
 
 We will try to create these 4 models:
@@ -130,7 +125,6 @@ summary(model2)
 # Model 2 interactions
 model2_int1 <- lm(R_moment_2_sigmoid ~ St + Re + Fr_sigmoid + St*Re + St*Fr_sigmoid + Re*Fr_sigmoid, data = train1)
 summary(model2_int1)
-library(car)
 vif(model2_int1)
 ```
 
