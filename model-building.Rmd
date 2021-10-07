@@ -25,14 +25,29 @@ test
 # will be within a finite range.
 
 train1 <- train %>%
-  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr))) %>%
-  mutate(R_moment_2_sigmoid = 1 / ( 1 + exp(-R_moment_2)))
+  rename(M1 = R_moment_1, 
+         M2 = R_moment_2, 
+         M3 = R_moment_3, 
+         M4 = R_moment_4) %>%
+  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr)),
+         M1_sigmoid = 1 / ( 1 + exp(-M1)),
+         M2_sigmoid = 1 / ( 1 + exp(-M2)),
+         M3_sigmoid = 1 / ( 1 + exp(-M3)),
+         M4_sigmoid = 1 / ( 1 + exp(-M4)))
 
 train1
 cor(train1)
 
 test1 <- test %>%
-  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr))) 
+  rename(M1 = R_moment_1, 
+         M2 = R_moment_2, 
+         M3 = R_moment_3, 
+         M4 = R_moment_4) %>%
+  mutate(Fr_sigmoid = 1 / ( 1 + exp(-Fr)),
+         M1_sigmoid = 1 / ( 1 + exp(-M1)),
+         M2_sigmoid = 1 / ( 1 + exp(-M2)),
+         M3_sigmoid = 1 / ( 1 + exp(-M3)),
+         M4_sigmoid = 1 / ( 1 + exp(-M4)))
 
 test1
 
