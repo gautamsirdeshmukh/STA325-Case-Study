@@ -1,6 +1,6 @@
 ---
 title: "model-building-draft"
-output: html_notebook
+output: pdf_document
 ---
 
 ```{r}
