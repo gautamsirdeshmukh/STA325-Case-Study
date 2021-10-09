@@ -133,6 +133,13 @@ for (i in 1:10) {
 sum(cv_error_10_1b) / 10 # MSE
 ```
 
+```{r}
+ggplot(data = train1, mapping = aes(x = Re, y = log(M1), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+```
+
 ```{r predictive-model-1c, warning = FALSE}
 # Model 1c
 model_1c <- glm(M1_sigmoid ~ St + Re_categorical + Fr_categorical, data = train1)
