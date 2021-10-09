@@ -99,9 +99,8 @@ are also highly correlated to each other).
 
 ```{r predictive-model-1a, warning = FALSE}
 # Model 1a
-model_1a <- glm(M1 ~ St + Re_categorical + Fr_categorical, data = train1)
-# summary(model_1a)
-with(summary(model_1a), 1 - deviance / null.deviance) # R^2
+model_1a <- lm(M1 ~ St + Re_categorical + Fr_categorical, data = train1)
+summary(model_1a)
 
 # 10-fold Cross Validation
 set.seed(100)
