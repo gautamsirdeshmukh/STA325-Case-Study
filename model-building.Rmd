@@ -220,6 +220,43 @@ summary(model2_int1)
 #vif(model2_int1)
 ```
 
+```{r m2-polynomial}
+set.seed(301)
+cv_rss = rep(NA, 10)
+for (i in 1:10) {
+    glm.fit = glm(log(M2) ~ poly(St, i) + Fr_categorical + Re_categorical + Re_categorical * Fr_categorical, data = train1)
+    cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
+}
+
+poly <- c(1:10)
+cv_df <- data.frame(poly, cv_rss)
+
+ggplot(cv_df, aes(x = poly, y = cv_rss)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(1:10)) +
+  labs(title = "CV Error",
+       y = "CV Error",
+       x = "Polynomial Degree") +
+  theme_minimal(base_size = 11)
+
+best_poly <- rep(0, length(1:30))
+for (j in 1:30) {
+set.seed(j)
+cv_rss = rep(NA, 10)
+for (i in 1:10) {
+    glm.fit = glm(log(M2) ~ poly(St, i) + Fr_categorical + Re_categorical + Re_categorical * Fr_categorical, data = train1)
+    cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
+}
+
+poly <- c(1:10)
+cv_df <- data.frame(poly, cv_rss)
+
+best_poly[j] <- which.min(x = cv_df$cv_rss)
+}
+summary(best_poly)
+hist(best_poly)
+```
+
 ## M3
 
 ```{r}
@@ -247,6 +284,7 @@ summary(model4_int1)
 # Nonlinear models
 
 ```{r}
+cv_rss = rep(NA, 10)
 for (i in 1:10) {
     glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical + Re_categorical, data = train1)
     cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
