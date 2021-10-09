@@ -104,33 +104,14 @@ are also highly correlated to each other).
 model_1a <- lm(log(M1) ~ St + Re_categorical + Fr_categorical, data = train1)
 summary(model_1a)
 
-# 10-fold Cross Validation
-set.seed(100)
+# 5-fold Cross Validation
+set.seed(200)
 cv_error_5_1a = rep(0, 5)
 for (i in 1:5) {
-  model_1a <- glm(M1 ~ St + Re_categorical + Fr_categorical, data = train1)
-  cv_error_5_1a[i] = cv.glm(train1, model_1a, K = 5)$delta[1]
+  model_1a <- glm(log(M1) ~ St + Re_categorical + Fr_categorical, data = train1)
+  cv_error_5_1a[i] = cv.glm(train1, model_1a, K = 5)$delta[2]
   }
 sum(cv_error_5_1a) / 5 # MSE
-```
-
-```{r}
-cv_rss = rep(NA, 10)
-for (i in 1:10) {
-    glm.fit = glm(M1 ~ poly(St, i) + Re_categorical + Fr_categorical, data = train1)
-    cv_rss[i] = cv.glm(train1, glm.fit, K = 10)$delta[2]
-}
-
-poly <- c(1:10)
-cv_df <- data.frame(poly, cv_rss)
-
-ggplot(cv_df, aes(x = poly, y = cv_rss)) +
-  geom_line() +
-  scale_x_continuous(breaks = c(1:10)) +
-  labs(title = "CV Error",
-       y = "CV Error",
-       x = "Polynomial Degree") +
-  theme_minimal(base_size = 11)
 ```
 
 
@@ -154,10 +135,14 @@ sum(cv_error_10_1b) / 10 # MSE
 ```
 
 ```{r}
-ggplot(data = train1, mapping = aes(x = Re, y = log(M1), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
-ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
-ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
-ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M1), color = Fr_categorical)) + 
+  geom_point(alpha = 0.25) + geom_smooth(size = 0.5, se = FALSE) + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)) + 
+  geom_point(alpha = 0.25) + geom_smooth(size = 0.5, se = FALSE) + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)) + 
+  geom_point(alpha = 0.25) + geom_smooth(size = 0.5, se = FALSE) + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)) + 
+  geom_point(alpha = 0.25) + geom_smooth(size = 0.5, se = FALSE) + theme_minimal(base_size = 11)
 ```
 
 ```{r}
@@ -204,6 +189,22 @@ for (i in 1:5) {
   }
 sum(cv_error_5_1d) / 5 # MSE
 ```
+
+```{r m1-final-model}
+# Model 1e, final model
+model_1e <- lm(log(M1) ~ poly(St, 7) + Re_categorical + Fr_categorical, data = train1)
+summary(model_1e)
+
+# 5-fold Cross Validation
+set.seed(200)
+cv_error_5_1e = rep(0, 5)
+for (i in 1:5) {
+  model_1e <- glm(log(M1) ~ poly(St, 7) + Re_categorical + Fr_categorical, data = train1)
+  cv_error_5_1e[i] = cv.glm(train1, model_1e, K = 5)$delta[2]
+  }
+sum(cv_error_5_1e) / 5 # MSE
+```
+
 ## M2
 
 ```{r predictive-models}
@@ -246,10 +247,9 @@ summary(model4_int1)
 # Nonlinear models
 
 ```{r}
-cv_rss = rep(NA, 10)
 for (i in 1:10) {
-    glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical, data = train1)
-    cv_rss[i] = cv.glm(train1, glm.fit, K = 10)$delta[2]
+    glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical + Re_categorical, data = train1)
+    cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
 }
 
 poly <- c(1:10)
@@ -262,6 +262,34 @@ ggplot(cv_df, aes(x = poly, y = cv_rss)) +
        y = "CV Error",
        x = "Polynomial Degree") +
   theme_minimal(base_size = 11)
+```
+
+### Repeat for 30 seeds to see most common optimal polynomial degree
+```{r}
+best_poly <- rep(0, length(1:30))
+for (j in 1:30) {
+set.seed(j)
+cv_rss = rep(NA, 10)
+for (i in 1:10) {
+    glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical + Re_categorical, data = train1)
+    cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
+}
+
+poly <- c(1:10)
+cv_df <- data.frame(poly, cv_rss)
+
+# ggplot(cv_df, aes(x = poly, y = cv_rss)) +
+#   geom_line() +
+#   scale_x_continuous(breaks = c(1:10)) +
+#   labs(title = "CV Error",
+#        y = "CV Error",
+#        x = "Polynomial Degree") +
+#   theme_minimal(base_size = 11)
+
+best_poly[j] <- which.min(x = cv_df$cv_rss)
+}
+summary(best_poly)
+hist(best_poly)
 ```
 
 ```{r warning = FALSE}
