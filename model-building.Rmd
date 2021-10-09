@@ -207,7 +207,7 @@ sum(cv_error_5_1e) / 5 # MSE
 
 ## M2
 
-```{r predictive-models}
+```{r predictive-models warning = F, message=F}
 # Model 2 (linear)
 model2 <- lm(log(M2) ~ St + Re_categorical + Fr_categorical, data = train1)
 summary(model2)
@@ -218,7 +218,32 @@ model2_int1 <- lm(log(M2) ~ St + Re_categorical + Fr_categorical +
                     Re_categorical * Fr_categorical, data = train1)
 summary(model2_int1)
 #vif(model2_int1)
+
+# 5-fold Cross Validation
+set.seed(200)
+cv_error_5_2inter = rep(0, 5)
+for (i in 1:5) {
+  model2_int1 <- glm(log(M2) ~ St + Re_categorical + Fr_categorical + Re_categorical * Fr_categorical, data = train1)
+  cv_error_5_2inter[i] = cv.glm(train1, model2_int1, K = 5)$delta[2]
+  }
+sum(cv_error_5_2inter) / 5 # MSE
+
+# Model 2 polynomial
+model2_int1poly <- lm(log(M2) ~ poly(St, 10) + Re_categorical + Fr_categorical +
+                        Re_categorical * Fr_categorical, data = train1)
+summary(model2_int1poly)
+
+# 5-fold Cross Validation
+set.seed(200)
+cv_error_5_2poly = rep(0, 5)
+for (i in 1:5) {
+  model2_int1poly <- glm(log(M2) ~ poly(St, 10) + Re_categorical + Fr_categorical + Re_categorical * Fr_categorical, data = train1)
+  cv_error_5_2poly[i] = cv.glm(train1, model2_int1poly, K = 5)$delta[2]
+  }
+sum(cv_error_5_2poly) / 5 # MSE
 ```
+
+The polynomial model has a much lower CV error (0.54) than the linear model with interactions but no polynomial (CV error of 1.65). However, spline has an even lower CV error, at around 0.45.
 
 ```{r m2-polynomial}
 set.seed(301)
@@ -330,6 +355,7 @@ summary(best_poly)
 hist(best_poly)
 ```
 
+## Spline M1
 ```{r warning = FALSE}
 df_range_cv = rep(NA, 25)
 for (i in 3:25) {
@@ -350,6 +376,30 @@ ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
        x = "df") +
   theme_minimal(base_size = 11)
 ```
+
+## Spline M2
+```{r}
+df_range_cv = rep(NA, 25)
+for (i in 3:25) {
+    lm.fit = gam(log(M2) ~ s(St, df = i) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+    df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
+}
+
+spline_df_cv <- c(3:25)
+rss_cv <- df_range_cv[-c(1, 2)]
+spline_rss_cv <- data.frame(spline_df_cv, rss_cv)
+spline_rss_cv
+
+ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
+  geom_line() +
+  scale_x_continuous() +
+  labs(title = "Spline",
+       y = "CV Error",
+       x = "df") +
+  theme_minimal(base_size = 11)
+```
+
 
 ## Apply to test data
 
