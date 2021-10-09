@@ -1,0 +1,45 @@
+---
+title: "model-building-draft"
+output: html_notebook
+---
+
+```{r}
+cv_rss = rep(NA, 10)
+for (i in 1:10) {
+    glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical, data = train1)
+    cv_rss[i] = cv.glm(train1, glm.fit, K = 10)$delta[2]
+}
+
+poly <- c(1:10)
+cv_df <- data.frame(poly, cv_rss)
+
+ggplot(cv_df, aes(x = poly, y = cv_rss)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(1:10)) +
+  labs(title = "CV Error",
+       y = "CV Error",
+       x = "Polynomial Degree") +
+  theme_minimal(base_size = 11)
+```
+
+```{r warning = FALSE}
+
+df_range_cv = rep(NA, 25)
+for (i in 3:25) {
+    lm.fit = gam(log(M1) ~ s(St, df = i) + Re_categorical + Fr_categorical, data = train1)
+    df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
+}
+
+spline_df_cv <- c(3:25)
+rss_cv <- df_range_cv[-c(1, 2)]
+spline_rss_cv <- data.frame(spline_df_cv, rss_cv)
+spline_rss_cv
+
+ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
+  geom_line() +
+  scale_x_continuous() +
+  labs(title = "Spline",
+       y = "CV Error",
+       x = "df") +
+  theme_minimal(base_size = 11)
+```
