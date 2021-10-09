@@ -99,7 +99,7 @@ are also highly correlated to each other).
 
 ```{r predictive-model-1a, warning = FALSE}
 # Model 1a
-model_1a <- lm(M1 ~ St + Re_categorical + Fr_categorical, data = train1)
+model_1a <- lm(log(M1) ~ St + Re_categorical + Fr_categorical, data = train1)
 summary(model_1a)
 
 # 10-fold Cross Validation
@@ -114,11 +114,10 @@ sum(cv_error_10_1a) / 10 # MSE
 
 ```{r predictive-model-1b, warning = FALSE}
 # Model 1b
-model_1b <- glm(M1 ~ St + Re_categorical + Fr_categorical + 
+model_1b <- lm(log(M1) ~ St + Re_categorical + Fr_categorical + 
                 St * Re_categorical + St * Fr_categorical + Re_categorical * Fr_categorical, 
               data = train1)
-# summary(model1b)
-with(summary(model_1b), 1 - deviance / null.deviance) # R^2
+summary(model_1b)
 
 # 10-fold Cross Validation
 set.seed(100)
@@ -138,6 +137,15 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)
 ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
 ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
 ```
+
+```{r}
+ggplot(data = train1, mapping = aes(x = St, y = Re)) + geom_point()
+ggplot(data = train1, mapping = aes(x = St, y = log(M1), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = St, y = log(M2), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = St, y = log(M3), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = St, y = log(M4), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+```
+
 
 ```{r predictive-model-1c, warning = FALSE}
 # Model 1c
