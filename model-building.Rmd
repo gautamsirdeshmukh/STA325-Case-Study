@@ -112,6 +112,26 @@ for (i in 1:10) {
 sum(cv_error_10_1a) / 10 # MSE
 ```
 
+```{r}
+cv_rss = rep(NA, 10)
+for (i in 1:10) {
+    glm.fit = glm(M1 ~ poly(St, i) + Re_categorical + Fr_categorical, data = train1)
+    cv_rss[i] = cv.glm(train1, glm.fit, K = 10)$delta[2]
+}
+
+poly <- c(1:10)
+cv_df <- data.frame(poly, cv_rss)
+
+ggplot(cv_df, aes(x = poly, y = cv_rss)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(1:10)) +
+  labs(title = "CV Error",
+       y = "CV Error",
+       x = "Polynomial Degree") +
+  theme_minimal(base_size = 11)
+```
+
+
 ```{r predictive-model-1b, warning = FALSE}
 # Model 1b
 model_1b <- lm(log(M1) ~ St + Re_categorical + Fr_categorical + 
