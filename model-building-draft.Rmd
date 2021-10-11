@@ -6,7 +6,7 @@ output: pdf_document
 ```{r}
 cv_rss = rep(NA, 10)
 for (i in 1:10) {
-    glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical, data = train1)
+    glm.fit = glm(log(M1) ~ poly(St, i) + Fr_categorical + Re_cate, data = train1)
     cv_rss[i] = cv.glm(train1, glm.fit, K = 10)$delta[2]
 }
 
