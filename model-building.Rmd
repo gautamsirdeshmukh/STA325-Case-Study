@@ -55,89 +55,102 @@ ggplot(data = train1, mapping = aes(x = St)) +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda1.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = Re)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda2.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = Fr)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda3.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = Fr_sigmoid)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda4.5.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M1)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda5.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M1_sigmoid)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda6.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M2)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda7.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M2_sigmoid)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda8.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M3)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0), labels = label_number(suffix = "M", scale = 1e-6)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda9.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M3_sigmoid)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda10.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M4)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0), labels = label_number(suffix = "B", scale = 1e-9)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda11.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = M4_sigmoid)) + 
   geom_histogram(fill = "skyblue", color = "white") +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
   theme_minimal()
-ggsave("./plots/eda12.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = log(St), y = M1)) + 
   geom_point() +
   theme_minimal()
-ggsave("./plots/eda13.png", plot = last_plot(), width = 4.5, height = 3)
 train1 <- train1 %>%
   mutate(Re_categorical = case_when(Re == 90 ~ "Low", Re == 224 ~ "Medium", Re == 398 ~ "High"),
          Fr_categorical = case_when(Fr == 0.052 ~ "Low", Fr == 0.3 ~ "Medium", Fr == Inf ~ "High"))
 ggplot(data = train1, mapping = aes(x = St, y = M2)) + 
   geom_point() +
   theme_minimal()
-ggsave("./plots/eda14.png", plot = last_plot(), width = 4.5, height = 3)
 ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = M2)) + 
   geom_point() +
   theme_minimal()
-ggsave("./plots/eda15.png", plot = last_plot(), width = 4.5, height = 3)
 ```
+
+```{r}
+ggplot(data = train1, mapping = aes(x = log(M1))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+#ggsave("./plots/eda_log_M1.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(M2))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+#ggsave("./plots/eda_log_M2.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(M3))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+#ggsave("./plots/eda_log_M3.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(M4))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+#ggsave("./plots/eda_log_M4.png", plot = last_plot(), width = 4.5, height = 3)
+```
+
 
 We will try to create these 4 models:
 
@@ -214,7 +227,7 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M1), color = Fr_categorical)
        y = "Logarithm of M1",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda_1.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda_1.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -224,7 +237,7 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)
        y = "Logarithm of M2",
        color = "Fr") +
   theme_minimal(base_size = 11) 
-ggsave("./plots/eda_2.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda_2.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -234,7 +247,7 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)
        y = "Logarithm of M3",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda_3.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda_3.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -244,7 +257,7 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)
        y = "Logarithm of M4",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda_4.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda_4.png", plot = last_plot(), width = 4.5, height = 3)
 ```
 
 ```{r}
@@ -254,7 +267,7 @@ ggplot(data = train1, mapping = aes(x = St, y = Re)) +
   labs(x = "St",
        y = "Re") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda16.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda16.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = St, y = log(M1), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -263,7 +276,7 @@ ggplot(data = train1, mapping = aes(x = St, y = log(M1), color = Fr_categorical)
        y = "Logarithm of M1",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda17.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda17.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = St, y = log(M2), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -272,7 +285,7 @@ ggplot(data = train1, mapping = aes(x = St, y = log(M2), color = Fr_categorical)
        y = "Logarithm of M2",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda18.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda18.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = St, y = log(M3), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -281,7 +294,7 @@ ggplot(data = train1, mapping = aes(x = St, y = log(M3), color = Fr_categorical)
        y = "Logarithm of M3",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda19.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda19.png", plot = last_plot(), width = 4.5, height = 3)
 
 ggplot(data = train1, mapping = aes(x = St, y = log(M4), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
@@ -290,7 +303,7 @@ ggplot(data = train1, mapping = aes(x = St, y = log(M4), color = Fr_categorical)
        y = "Logarithm of M4",
        color = "Fr") +
   theme_minimal(base_size = 11)
-ggsave("./plots/eda20.png", plot = last_plot(), width = 4.5, height = 3)
+#ggsave("./plots/eda20.png", plot = last_plot(), width = 4.5, height = 3)
 ```
 
 
@@ -377,14 +390,15 @@ ggplot() +
   labs(title = "CV Error (All Iterations)",
        y = "CV Error",
        x = "Polynomial Degree",
-       caption = "The thick line is the average across all CV iterations (thin lines).") +
+       caption = "The thick line is the average across all CV iterations (thin lines).",
+       subtitle = "Predicting log(M1)") +
   scale_x_continuous(breaks = seq(1, 11, by = 1)) +
   scale_y_continuous() +
   theme_minimal(base_size = 10) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank(),
         plot.caption = element_text(hjust = 0.5))
-ggsave("./plots/cv_err_model1.png", plot = last_plot(), width = 6, height = 4.5)
+#ggsave("./plots/cv_err_model1.png", plot = last_plot(), width = 6, height = 4.5)
 ```
 
 
@@ -398,10 +412,11 @@ ggplot(final_summary, aes(x = poly, y = cv_error_5_1e)) +
   labs(title = "CV Error (Average)",
        y = "CV Error (Average)",
        x = "Polynomial Degree",
-       caption = "We zoomed in to focus only on the thick line - the average CV for all 100 iterations.") +
+       caption = "We zoomed in to focus only on the thick line - the average CV for all 100 iterations.",
+       subtitle = "Predicting log(M1)") +
   theme_minimal(base_size = 10) +
   theme(plot.caption = element_text(hjust = 0.5))
-ggsave("./plots/cv_err_model1_average.png", plot = last_plot(), width = 6, height = 4)
+#ggsave("./plots/cv_err_model1_average.png", plot = last_plot(), width = 6, height = 4)
 ```
 
 ## M2
@@ -522,7 +537,7 @@ ggplot() +
   theme(legend.position = "none",
         panel.grid.minor = element_blank(),
         plot.caption = element_text(hjust = 0.5))
-ggsave("./plots/cv_err_model2.png", plot = last_plot(), width = 6, height = 4.5)
+#ggsave("./plots/cv_err_model2.png", plot = last_plot(), width = 6, height = 4.5)
 ``` 
 
 ## M3
@@ -717,6 +732,7 @@ ggplot() +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
+       subtitle = "Predicting log(M2)",
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
@@ -724,7 +740,7 @@ ggplot() +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank())
-ggsave("./plots/cv_err_model2_spline.png", plot = last_plot(), width = 6, height = 4.5)
+#ggsave("./plots/cv_err_model2_spline.png", plot = last_plot(), width = 6, height = 4.5)
 ```
 
 
@@ -798,6 +814,7 @@ ggplot() +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
+       subtitle = "Predicting log(M3)",
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
@@ -805,7 +822,7 @@ ggplot() +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank())
-ggsave("./plots/cv_err_model3_spline.png", plot = last_plot(), width = 6, height = 4.5)
+#ggsave("./plots/cv_err_model3_spline.png", plot = last_plot(), width = 6, height = 4.5)
 ```
 
 ## Spline M4
@@ -856,6 +873,7 @@ ggplot() +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
+       subtitle = "Predicting log(M4)",
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
@@ -863,7 +881,7 @@ ggplot() +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank())
-ggsave("./plots/cv_err_model4_spline.png", plot = last_plot(), width = 6, height = 4.5)
+#ggsave("./plots/cv_err_model4_spline.png", plot = last_plot(), width = 6, height = 4.5)
 ```
 
 ## Final Models
