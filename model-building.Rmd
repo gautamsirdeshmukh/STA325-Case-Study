@@ -670,48 +670,142 @@ ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
 
 ## Spline M2
 ```{r}
-df_range_cv = rep(NA, 25)
-for (i in 3:25) {
+final_df <- tibble(seed = "", df = "", cv_rss_m2 = "")
+
+for (j in c(1:10)) {
+set.seed(j)
+cv_rss_m2 = rep(NA, 15)
+
+for (i in 1:15) {
     lm.fit = gam(log(M2) ~ s(St, df = i) + Re_categorical + Fr_categorical + 
                    Re_categorical * Fr_categorical, data = train1)
     df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
 }
 
-spline_df_cv <- c(3:25)
-rss_cv <- df_range_cv[-c(1, 2)]
-spline_rss_cv <- data.frame(spline_df_cv, rss_cv)
-spline_rss_cv
+seed <- rep(j, 15)
+df <- c(1:15)
+cv_rss_m2 <- df_range_cv
+cv_df <- data.frame(seed, df)
+final_df <- rbind(final_df, cv_df)
+}
 
-ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
-  geom_line() +
-  scale_x_continuous() +
-  labs(title = "Spline",
-       y = "CV Error",
-       x = "df") +
-  theme_minimal(base_size = 11)
+final_df
+
 ```
 
-## Spline M3
 ```{r}
-df_range_cv = rep(NA, 25)
-for (i in 3:25) {
+final_df
+final_df <- final_df %>%
+  mutate(seed = as.factor(seed),
+         df = as.double(df),
+         cv_rss = as.double(cv_rss_m2)) %>%
+  na.omit()
+
+final_summary <- final_df %>%
+  group_by(df) %>%
+  summarize(cv_rss_m2 = mean(cv_rss_m2)) %>%
+  mutate(seed = 0)
+
+final <- rbind(final_summary, final_df)
+final
+
+
+ggplot() +
+  geom_line(data = final %>% filter(seed > 0), 
+            mapping = aes(x = df, y = cv_rss_m2, color = seed, alpha = 0.5)) +
+  scale_color_manual(values = c(rep("black", 35))) +
+  geom_line(data = final %>% filter(seed == 0),
+            mapping = aes(x = df, y = cv_rss_m2, alpha = 1), color = "black") +
+  labs(title = "CV Error",
+       y = "CV Error",
+       x = "Degrees of Freedom") +
+  scale_x_continuous(breaks = seq(1, 35, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 2, by = 0.25)) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
+ggsave("./plots/cv_err_model2_spline.png", plot = last_plot(), width = 6, height = 4.5)
+```
+
+
+## Spline M3
+
+```{r}
+final_df <- tibble(seed = "", df = "", cv_rss = "")
+final_df
+
+for (j in c(1:10)) {
+set.seed(j)
+cv_rss = rep(NA, 25)
+
+for (i in 1:25) {
     lm.fit = gam(log(M3) ~ s(St, df = i) + Re_categorical + Fr_categorical + 
                    Re_categorical * Fr_categorical, data = train1)
     df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
 }
 
-spline_df_cv <- c(3:25)
-rss_cv <- df_range_cv[-c(1, 2)]
-spline_rss_cv <- data.frame(spline_df_cv, rss_cv)
-spline_rss_cv
+seed <- rep(j, 25)
+df <- c(1:25)
+cv_rss <- df_range_cv
+cv_df <- data.frame(seed, df, cv_rss)
+final_df <- rbind(final_df, cv_df)
+}
+```
 
-ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
-  geom_line() +
-  scale_x_continuous() +
-  labs(title = "Spline",
+```{r}
+# df_range_cv = rep(NA, 25)
+# for (i in 1:25) {
+#     lm.fit = gam(log(M3) ~ s(St, df = i) + Re_categorical + Fr_categorical + 
+#                    Re_categorical * Fr_categorical, data = train1)
+#     df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
+# }
+# 
+# spline_df_cv <- c(1:25)
+# rss_cv <- df_range_cv
+# spline_rss_cv <- data.frame(spline_df_cv, rss_cv)
+# spline_rss_cv
+# 
+# ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
+#   geom_line() +
+#   scale_x_continuous() +
+#   labs(title = "Spline",
+#        y = "CV Error",
+#        x = "df") +
+#   theme_minimal(base_size = 11)
+```
+
+```{r}
+final_df
+final_df <- final_df %>%
+  mutate(seed = as.factor(seed),
+         df = as.double(df),
+         cv_rss = as.double(cv_rss)) %>%
+  na.omit()
+
+final_summary <- final_df %>%
+  group_by(df) %>%
+  summarize(cv_rss = mean(cv_rss)) %>%
+  mutate(seed = 0)
+
+final <- rbind(final_summary, final_df)
+final
+
+
+ggplot() +
+  geom_line(data = final %>% filter(seed > 0), 
+            mapping = aes(x = df, y = cv_rss, color = seed, alpha = 0.5)) +
+  scale_color_manual(values = c(rep("black", 35))) +
+  geom_line(data = final %>% filter(seed == 0),
+            mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
+  labs(title = "CV Error",
        y = "CV Error",
-       x = "df") +
-  theme_minimal(base_size = 11)
+       x = "Degrees of Freedom") +
+  scale_x_continuous(breaks = seq(1, 35, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 2, by = 0.25)) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
+ggsave("./plots/cv_err_model2_spline.png", plot = last_plot(), width = 6, height = 4.5)
 ```
 
 ## Apply to test data
