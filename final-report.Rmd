@@ -3,8 +3,8 @@ title: "Final Report"
 subtitle: "Predicting the first four moments in particle turbulence"
 authors: "Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh, Gautam Sirdeshmukh"
 geometry: "top = 1cm, bottom = 1.5cm, left = 1cm, right = 1cm"
-fontsize: 9pt
 mainfont: Times New Roman
+fontsize: 10 pt
 output: 
   pdf_document:
     latex_engine: xelatex
