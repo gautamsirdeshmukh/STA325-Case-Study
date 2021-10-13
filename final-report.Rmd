@@ -8,8 +8,11 @@ fontsize: 10 pt
 output: 
   pdf_document:
     latex_engine: xelatex
----
 
+---
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
 <style type="text/css">
 
 body{ /* Normal  */
@@ -102,30 +105,55 @@ test1
 #### Final Models
 
 ```{r}
-M1 <- lm(log(M1) ~ poly(St, 3) + Re_categorical + Fr_categorical, data = train1)
+M1 <- lm(log(M1) ~ St + Re_categorical + Fr_categorical, data = train1)
 summary(M1)
 plot(M1)
 ```
+
 
 ```{r}
 M2 <- gam(log(M2) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
                    Re_categorical * Fr_categorical, data = train1)
 summary(M2)
-plot(M2)
+
 ```
 
 ```{r}
 M3 <- gam(log(M3) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
                    Re_categorical * Fr_categorical, data = train1)
 summary(M3)
-plot(M3)
 ```
 
 ```{r}
 M4 <- gam(log(M4) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
                    Re_categorical * Fr_categorical, data = train1)
 summary(M4)
-plot(M4)
+M4 <- gam(log(M4) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M4)
 ```
+
+```{r, warning=FALSE}
+M1_Predict <- as.data.frame(predict(M1, test1)) %>%
+  mutate(fit.exp = exp(M1_Predict$`predict(M1, test1)`))
+M2_Predict <- as.data.frame(predict(M2, test1)) %>%
+  mutate(M2_exp = exp(M2_Predict$`predict(M2, test1)`))
+M3_Predict <- as.data.frame(predict(M3, test1))
+M3_Predict <- M3_Predict %>%
+  mutate(M3_exp = exp(M3_Predict$`predict(M3, test1)`))
+M4_Predict <- as.data.frame(predict(M4, test1)) 
+M4_Predict <- M4_Predict %>%
+  mutate(M4_exp = exp(M4_Predict$`predict(M4, test1)`))
+
+m1_predictions <- M1_Predict$fit.exp
+m2_predictions <- M2_Predict$M2_exp
+m3_predictions <- M3_Predict$M3_exp
+m4_predictions <- M4_Predict$M4_exp
+
+data_test <- data.frame(m1_predictions, m2_predictions, m3_predictions, m4_predictions)
+data_test_prediction <- cbind(test, data_test)
+write_csv(data_test_prediction,"data_test_prediction.csv")
+```
+
 
 ### Conclusion
