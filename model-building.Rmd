@@ -801,7 +801,7 @@ ggplot() +
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
-  scale_y_continuous(breaks = seq(0, 7.5, by = 0.25)) +
+  scale_y_continuous(breaks = seq(0, 15, by = 1)) +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank())
@@ -859,12 +859,44 @@ ggplot() +
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
-  scale_y_continuous(breaks = seq(0, 7.5, by = 1)) +
+  scale_y_continuous(breaks = seq(0, 15, by = 1)) +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank())
 ggsave("./plots/cv_err_model4_spline.png", plot = last_plot(), width = 6, height = 4.5)
 ```
+
+## Final Models
+
+```{r}
+M1 <- lm(log(M1) ~ poly(St, 3) + Re_categorical + Fr_categorical, data = train1)
+summary(M1)
+plot(M1)
+```
+
+```{r}
+M2 <- gam(log(M2) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M2)
+plot(M2)
+```
+
+
+```{r}
+M3 <- gam(log(M3) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M3)
+plot(M3)
+```
+
+
+```{r}
+M4 <- gam(log(M4) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M4)
+plot(M4)
+```
+
 
 ## Apply to test data
 

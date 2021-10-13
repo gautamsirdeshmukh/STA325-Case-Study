@@ -2,8 +2,47 @@
 title: "Final Report"
 subtitle: "Predicting the first four moments in particle turbulence"
 authors: "Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh, Gautam Sirdeshmukh"
-output: pdf_document
+geometry: "top = 1cm, bottom = 1.5cm, left = 1cm, right = 1cm"
+fontsize: 9pt
+mainfont: Times New Roman
+output: 
+  pdf_document:
+    latex_engine: xelatex
 ---
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 10px;
+  }
+td {  /* Table  */
+  font-size: 7px;
+}
+h1.title {
+  font-size: 32px;
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  font-size: 24px;
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+    font-size: 18px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 14px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+}
+code.r{ /* Code block */
+    font-size: 10px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 12px;
+}
+</style>
+
 ### Introduction
 
 This report is authored by **Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh,** and **Gautam Sirdeshmukh.**
@@ -54,8 +93,9 @@ test1
 
 ![Predicting Raw Moment 1](./plots/cv_err_model1.png){#id .class width=50% height=50%}
 ![Predicting Raw Moment 1 (close zoom)](./plots/cv_err_model1_average.png){#id .class width=50% height=50%}
-
-![Predicting Raw Moment 2](./plots/cv_err_model2.png){#id .class width=50% height=50%}
+![Predicting Raw Moment 2](./plots/cv_err_model2_spline.png){#id .class width=40% height=40%}
+![Predicting Raw Moment 3](./plots/cv_err_model3_spline.png){#id .class width=40% height=40%}
+![Predicting Raw Moment 4](./plots/cv_err_model4_spline.png){#id .class width=40% height=40%}
 
 ### Results
 
