@@ -8,12 +8,84 @@ output: pdf_document
 
 This report is authored by **Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh,** and **Gautam Sirdeshmukh.**
 
-
 ### Methodology
 
-![Fig 1: Predicting Raw Moment 1](./plots/cv_err_model1.png){#id .class width=50% height=50%}
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+library(car)
+library(boot)
+library(gam)
+library(splines)
+train <- read_csv("data-train.csv")
+test <- read_csv("data-test.csv")
+cor(train)
+```
+
+```{r eda}
+# We transform the variables using the sigmoid function so that this variable 
+# will be within a finite range.
+
+train1 <- train %>%
+  rename(M1 = R_moment_1, M2 = R_moment_2, M3 = R_moment_3, M4 = R_moment_4) %>%
+  mutate(Fr_sigmoid = 1 / (1 + exp(-Fr)),
+         Re_sigmoid = 1 / (1 + exp(-Re)),
+         M1_sigmoid = 1 / (1 + exp(-M1)),
+         M2_sigmoid = 1 / (1 + exp(-M2)),
+         M3_sigmoid = 1 / (1 + exp(-M3)),
+         M4_sigmoid = 1 / (1 + exp(-M4))) %>%
+  mutate(Re_categorical = case_when(Re == 90 ~ "Low", Re == 224 ~ "Medium", Re == 398 ~ "High"),
+         Fr_categorical = case_when(Fr == 0.052 ~ "Low", Fr == 0.3 ~ "Medium", Fr == Inf ~ "High"))
+
+test1 <- test %>%
+  mutate(Fr_sigmoid = 1 / (1 + exp(-Fr)),
+         Re_sigmoid = 1 / (1 + exp(-Re))) %>%
+  mutate(Re_categorical = case_when(Re == 90 ~ "Low", Re == 224 ~ "Medium", Re == 398 ~ "High"),
+         Fr_categorical = case_when(Fr == 0.052 ~ "Low", Fr == 0.3 ~ "Medium", Fr == Inf ~ "High"))
+
+train1
+test1
+```
+
+#### Quick Overview
+
+
+
+
+
+![Predicting Raw Moment 1](./plots/cv_err_model1.png){#id .class width=50% height=50%}
 ![Predicting Raw Moment 1 (close zoom)](./plots/cv_err_model1_average.png){#id .class width=50% height=50%}
 
+![Predicting Raw Moment 2](./plots/cv_err_model2.png){#id .class width=50% height=50%}
+
 ### Results
+
+#### Final Models
+
+```{r}
+M1 <- lm(log(M1) ~ poly(St, 3) + Re_categorical + Fr_categorical, data = train1)
+summary(M1)
+plot(M1)
+```
+
+```{r}
+M2 <- gam(log(M2) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M2)
+plot(M2)
+```
+
+```{r}
+M3 <- gam(log(M3) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M3)
+plot(M3)
+```
+
+```{r}
+M4 <- gam(log(M4) ~ s(St, df = 9) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+summary(M4)
+plot(M4)
+```
 
 ### Conclusion
