@@ -670,22 +670,22 @@ ggplot(spline_rss_cv, aes(x = spline_df_cv, y = rss_cv)) +
 
 ## Spline M2
 ```{r}
-final_df <- tibble(seed = "", df = "", cv_rss_m2 = "")
+final_df <- tibble(seed = NA, df = NA, cv_rss = NA)
 
 for (j in c(1:10)) {
 set.seed(j)
-cv_rss_m2 = rep(NA, 15)
+cv_rss = rep(NA, 25)
 
-for (i in 1:15) {
+for (i in 1:25) {
     lm.fit = gam(log(M2) ~ s(St, df = i) + Re_categorical + Fr_categorical + 
                    Re_categorical * Fr_categorical, data = train1)
     df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
 }
 
-seed <- rep(j, 15)
-df <- c(1:15)
-cv_rss_m2 <- df_range_cv
-cv_df <- data.frame(seed, df)
+seed <- rep(j, 25)
+df <- c(1:25)
+cv_rss <- df_range_cv
+cv_df <- data.frame(seed, df, cv_rss)
 final_df <- rbind(final_df, cv_df)
 }
 
@@ -698,12 +698,12 @@ final_df
 final_df <- final_df %>%
   mutate(seed = as.factor(seed),
          df = as.double(df),
-         cv_rss = as.double(cv_rss_m2)) %>%
+         cv_rss = as.double(cv_rss)) %>%
   na.omit()
 
 final_summary <- final_df %>%
   group_by(df) %>%
-  summarize(cv_rss_m2 = mean(cv_rss_m2)) %>%
+  summarize(cv_rss = mean(cv_rss)) %>%
   mutate(seed = 0)
 
 final <- rbind(final_summary, final_df)
@@ -712,10 +712,10 @@ final
 
 ggplot() +
   geom_line(data = final %>% filter(seed > 0), 
-            mapping = aes(x = df, y = cv_rss_m2, color = seed, alpha = 0.5)) +
+            mapping = aes(x = df, y = cv_rss, color = seed, alpha = 0.5)) +
   scale_color_manual(values = c(rep("black", 35))) +
   geom_line(data = final %>% filter(seed == 0),
-            mapping = aes(x = df, y = cv_rss_m2, alpha = 1), color = "black") +
+            mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
        y = "CV Error",
        x = "Degrees of Freedom") +
@@ -801,11 +801,69 @@ ggplot() +
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
-  scale_y_continuous(breaks = seq(0, 2, by = 0.25)) +
+  scale_y_continuous(breaks = seq(0, 7.5, by = 0.25)) +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
         panel.grid.minor = element_blank())
-ggsave("./plots/cv_err_model2_spline.png", plot = last_plot(), width = 6, height = 4.5)
+ggsave("./plots/cv_err_model3_spline.png", plot = last_plot(), width = 6, height = 4.5)
+```
+
+## Spline M4
+
+```{r}
+final_df <- tibble(seed = "", df = "", cv_rss = "")
+final_df
+
+for (j in c(1:10)) {
+set.seed(j)
+cv_rss = rep(NA, 25)
+
+for (i in 1:25) {
+    lm.fit = gam(log(M4) ~ s(St, df = i) + Re_categorical + Fr_categorical + 
+                   Re_categorical * Fr_categorical, data = train1)
+    df_range_cv[i] = cv.glm(train1, lm.fit, K = 5)$delta[2]
+}
+
+seed <- rep(j, 25)
+df <- c(1:25)
+cv_rss <- df_range_cv
+cv_df <- data.frame(seed, df, cv_rss)
+final_df <- rbind(final_df, cv_df)
+}
+```
+
+```{r}
+final_df
+final_df <- final_df %>%
+  mutate(seed = as.factor(seed),
+         df = as.double(df),
+         cv_rss = as.double(cv_rss)) %>%
+  na.omit()
+
+final_summary <- final_df %>%
+  group_by(df) %>%
+  summarize(cv_rss = mean(cv_rss)) %>%
+  mutate(seed = 0)
+
+final <- rbind(final_summary, final_df)
+final
+
+
+ggplot() +
+  geom_line(data = final %>% filter(seed > 0), 
+            mapping = aes(x = df, y = cv_rss, color = seed, alpha = 0.5)) +
+  scale_color_manual(values = c(rep("black", 35))) +
+  geom_line(data = final %>% filter(seed == 0),
+            mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
+  labs(title = "CV Error",
+       y = "CV Error",
+       x = "Degrees of Freedom") +
+  scale_x_continuous(breaks = seq(1, 35, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 7.5, by = 1)) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
+ggsave("./plots/cv_err_model4_spline.png", plot = last_plot(), width = 6, height = 4.5)
 ```
 
 ## Apply to test data
