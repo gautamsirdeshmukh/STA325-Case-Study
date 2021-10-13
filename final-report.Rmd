@@ -1,14 +1,18 @@
 ---
 title: "Final Report"
+subtitle: "Predicting the first four moments in particle turbulence"
 authors: "Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh, Gautam Sirdeshmukh"
 output: pdf_document
 ---
-
-*Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh, Gautam Sirdeshmukh*
-
 ### Introduction
 
+This report is authored by **Matthew Cui, Phillip Harmadi, Glen Morgenstern, Joe Wang, Gaurav Sirdeshmukh,** and **Gautam Sirdeshmukh.**
+
+
 ### Methodology
+
+![Fig 1: Predicting Raw Moment 1](./plots/cv_err_model1.png){#id .class width=50% height=50%}
+![Predicting Raw Moment 1 (close zoom)](./plots/cv_err_model1_average.png){#id .class width=50% height=50%}
 
 ### Results
 

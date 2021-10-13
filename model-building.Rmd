@@ -47,27 +47,96 @@ test1 <- test %>%
 test1
 ```
 
-```{r}
-ggplot(data = train1, mapping = aes(x = St)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = Re)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = Fr)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = Fr_sigmoid)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M1)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M1_sigmoid)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M2)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M2_sigmoid)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M3)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M3_sigmoid)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M4)) + geom_histogram()
-ggplot(data = train1, mapping = aes(x = M4_sigmoid)) + geom_histogram()
-
-ggplot(data = train1, mapping = aes(x = log(St), y = M1)) + geom_point()
-
+```{r, fig.height = 2, fig.width = 3}
+library(scales)
+par(mfrow = c(5,3))
+ggplot(data = train1, mapping = aes(x = St)) + 
+  geom_histogram(fill = "skyblue", color = "white") + 
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda1.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = Re)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda2.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = Fr)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda3.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = Fr_sigmoid)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda4.5.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M1)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda5.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M1_sigmoid)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda6.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M2)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda7.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M2_sigmoid)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda8.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M3)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0), labels = label_number(suffix = "M", scale = 1e-6)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda9.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M3_sigmoid)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda10.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M4)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0), labels = label_number(suffix = "B", scale = 1e-9)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda11.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = M4_sigmoid)) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda12.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(St), y = M1)) + 
+  geom_point() +
+  theme_minimal()
+ggsave("./plots/eda13.png", plot = last_plot(), width = 4.5, height = 3)
 train1 <- train1 %>%
   mutate(Re_categorical = case_when(Re == 90 ~ "Low", Re == 224 ~ "Medium", Re == 398 ~ "High"),
          Fr_categorical = case_when(Fr == 0.052 ~ "Low", Fr == 0.3 ~ "Medium", Fr == Inf ~ "High"))
-ggplot(data = train1, mapping = aes(x = St, y = M2)) + geom_point()
-ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = M2)) + geom_point()
+ggplot(data = train1, mapping = aes(x = St, y = M2)) + 
+  geom_point() +
+  theme_minimal()
+ggsave("./plots/eda14.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = M2)) + 
+  geom_point() +
+  theme_minimal()
+ggsave("./plots/eda15.png", plot = last_plot(), width = 4.5, height = 3)
 ```
 
 We will try to create these 4 models:
@@ -145,6 +214,8 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M1), color = Fr_categorical)
        y = "Logarithm of M1",
        color = "Fr") +
   theme_minimal(base_size = 11)
+ggsave("./plots/eda_1.png", plot = last_plot(), width = 4.5, height = 3)
+
 ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
   geom_smooth(size = 0.5, se = FALSE) + 
@@ -153,6 +224,8 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M2), color = Fr_categorical)
        y = "Logarithm of M2",
        color = "Fr") +
   theme_minimal(base_size = 11) 
+ggsave("./plots/eda_2.png", plot = last_plot(), width = 4.5, height = 3)
+
 ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
   geom_smooth(size = 0.5, se = FALSE) + 
@@ -161,6 +234,8 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M3), color = Fr_categorical)
        y = "Logarithm of M3",
        color = "Fr") +
   theme_minimal(base_size = 11)
+ggsave("./plots/eda_3.png", plot = last_plot(), width = 4.5, height = 3)
+
 ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)) + 
   geom_point(alpha = 0.5) + 
   geom_smooth(size = 0.5, se = FALSE) + 
@@ -169,15 +244,55 @@ ggplot(data = train1, mapping = aes(x = Re, y = log(M4), color = Fr_categorical)
        y = "Logarithm of M4",
        color = "Fr") +
   theme_minimal(base_size = 11)
+ggsave("./plots/eda_4.png", plot = last_plot(), width = 4.5, height = 3)
 ```
 
 ```{r}
-ggplot(data = train1, mapping = aes(x = St, y = Re)) + geom_point()
-ggplot(data = train1, mapping = aes(x = St, y = log(M1), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
-ggplot(data = train1, mapping = aes(x = St, y = log(M2), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
-ggplot(data = train1, mapping = aes(x = St, y = log(M3), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
-ggplot(data = train1, mapping = aes(x = St, y = log(M4), color = Fr_categorical)) + geom_point() + geom_smooth() + theme_minimal(base_size = 11)
+ggplot(data = train1, mapping = aes(x = St, y = Re)) + 
+  geom_point(alpha = 0.5) + 
+  geom_smooth(size = 0.5, se = FALSE) +
+  labs(x = "St",
+       y = "Re") +
+  theme_minimal(base_size = 11)
+ggsave("./plots/eda16.png", plot = last_plot(), width = 4.5, height = 3)
+
+ggplot(data = train1, mapping = aes(x = St, y = log(M1), color = Fr_categorical)) + 
+  geom_point(alpha = 0.5) + 
+  geom_smooth(size = 0.5, se = FALSE) +
+  labs(x = "St",
+       y = "Logarithm of M1",
+       color = "Fr") +
+  theme_minimal(base_size = 11)
+ggsave("./plots/eda17.png", plot = last_plot(), width = 4.5, height = 3)
+
+ggplot(data = train1, mapping = aes(x = St, y = log(M2), color = Fr_categorical)) + 
+  geom_point(alpha = 0.5) + 
+  geom_smooth(size = 0.5, se = FALSE) +
+  labs(x = "St",
+       y = "Logarithm of M2",
+       color = "Fr") +
+  theme_minimal(base_size = 11)
+ggsave("./plots/eda18.png", plot = last_plot(), width = 4.5, height = 3)
+
+ggplot(data = train1, mapping = aes(x = St, y = log(M3), color = Fr_categorical)) + 
+  geom_point(alpha = 0.5) + 
+  geom_smooth(size = 0.5, se = FALSE) +
+  labs(x = "St",
+       y = "Logarithm of M3",
+       color = "Fr") +
+  theme_minimal(base_size = 11)
+ggsave("./plots/eda19.png", plot = last_plot(), width = 4.5, height = 3)
+
+ggplot(data = train1, mapping = aes(x = St, y = log(M4), color = Fr_categorical)) + 
+  geom_point(alpha = 0.5) + 
+  geom_smooth(size = 0.5, se = FALSE) +
+  labs(x = "St",
+       y = "Logarithm of M4",
+       color = "Fr") +
+  theme_minimal(base_size = 11)
+ggsave("./plots/eda20.png", plot = last_plot(), width = 4.5, height = 3)
 ```
+
 
 
 ```{r predictive-model-1c, warning = FALSE}
@@ -218,17 +333,75 @@ sum(cv_error_5_1d) / 5 # MSE
 
 ```{r m1-final-model}
 # Model 1e, final model
-model_1e <- lm(log(M1) ~ poly(St, 7) + Re_categorical + Fr_categorical, data = train1)
+model_1e <- lm(log(M1) ~ poly(St, 3) + Re_categorical + Fr_categorical, data = train1)
 summary(model_1e)
 
 # 5-fold Cross Validation
-set.seed(200)
-cv_error_5_1e = rep(0, 5)
-for (i in 1:5) {
+final_df <- tibble(seed = "", poly = "", cv_error_5_1e = "")
+for (j in c(1:100)) {
+set.seed(j)
+cv_error_5_1e = rep(NA, 10)
+for (i in 1:10) {
   model_1e <- glm(log(M1) ~ poly(St, 7) + Re_categorical + Fr_categorical, data = train1)
   cv_error_5_1e[i] = cv.glm(train1, model_1e, K = 5)$delta[2]
-  }
-sum(cv_error_5_1e) / 5 # MSE
+}
+seed <- rep(j, 10)
+poly <- c(1:10)
+cv_df <- data.frame(seed, poly, cv_error_5_1e)
+final_df <- rbind(final_df, cv_df)
+}
+
+
+final_df <- final_df %>%
+  mutate(seed = as.factor(seed),
+         poly = as.double(poly),
+         cv_error_5_1e = as.double(cv_error_5_1e)) %>%
+  na.omit()
+final_df
+
+final_summary <- final_df %>%
+  group_by(poly) %>%
+  summarize(cv_error_5_1e = mean(cv_error_5_1e)) %>%
+  mutate(seed = 0)
+final_summary
+
+final <- rbind(final_summary, final_df)
+final
+
+ggplot() +
+  geom_line(data = final %>% filter(seed > 0), 
+            mapping = aes(x = poly, y = cv_error_5_1e, color = seed, alpha = 0.5)) +
+  scale_color_manual(values = c(rep("black", 100))) +
+  geom_line(data = final %>% filter(seed == 0),
+            mapping = aes(x = poly, y = cv_error_5_1e, alpha = 1), color = "black") +
+  labs(title = "CV Error (All Iterations)",
+       y = "CV Error",
+       x = "Polynomial Degree",
+       caption = "The thick line is the average across all CV iterations (thin lines).") +
+  scale_x_continuous(breaks = seq(1, 11, by = 1)) +
+  scale_y_continuous() +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0.5))
+ggsave("./plots/cv_err_model1.png", plot = last_plot(), width = 6, height = 4.5)
+```
+
+
+```{r m1-final-model}
+poly <- c(1:10)
+cv_df <- data.frame(poly, cv_error_5_1e)
+
+ggplot(final_summary, aes(x = poly, y = cv_error_5_1e)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(1:10)) +
+  labs(title = "CV Error (Average)",
+       y = "CV Error (Average)",
+       x = "Polynomial Degree",
+       caption = "We zoomed in to focus only on the thick line - the average CV for all 100 iterations.") +
+  theme_minimal(base_size = 10) +
+  theme(plot.caption = element_text(hjust = 0.5))
+ggsave("./plots/cv_err_model1_average.png", plot = last_plot(), width = 6, height = 4)
 ```
 
 ## M2
@@ -298,24 +471,23 @@ best_poly <- rep(0, length(1:30))
 final_df <- tibble(seed = "", poly = "", cv_rss = "")
 final_df
 
-for (j in c(1:30)) {
-set.seed(j)
-cv_rss = rep(NA, 11)
-for (i in 1:11) {
-    glm.fit = glm(log(M2) ~ poly(St, i) + Fr_categorical + Re_categorical + Re_categorical * Fr_categorical, data = train1)
-    cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
-}
-
-seed <- rep(j, 11)
-poly <- c(1:11)
-cv_df <- data.frame(seed, poly, cv_rss)
-final_df <- rbind(final_df, cv_df)
-
-best_poly[j] <- which.min(x = cv_df$cv_rss)
-}
-summary(best_poly)
-hist(best_poly)
-final_df
+# for (j in c(1:30)) {
+# set.seed(j)
+# cv_rss = rep(NA, 10)
+# for (i in 1:10) {
+#     glm.fit = glm(log(M2) ~ poly(St, i) + Fr_categorical + Re_categorical + Re_categorical * Fr_categorical, data = train1)
+#     cv_rss[i] = cv.glm(train1, glm.fit, K = 5)$delta[2]
+# }
+# 
+# seed <- rep(j, 10)
+# poly <- c(1:10)
+# cv_df <- data.frame(seed, poly, cv_rss)
+# final_df <- rbind(final_df, cv_df)
+# # best_poly[j] <- which.min(x = cv_df$cv_rss)
+# }
+# # summary(best_poly)
+# # hist(best_poly)
+# final_df
 ```
 
 ```{r}
@@ -342,12 +514,15 @@ ggplot() +
             mapping = aes(x = poly, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
        y = "CV Error",
-       x = "Polynomial Degree") +
+       x = "Polynomial Degree",
+       caption = "The thick line is the average across all CV iterations (thin lines).") +
   scale_x_continuous(breaks = seq(1, 11, by = 1)) +
   scale_y_continuous(breaks = seq(0, 2, by = 0.25)) +
   theme_minimal(base_size = 11) +
   theme(legend.position = "none",
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0.5))
+ggsave("./plots/cv_err_model2.png", plot = last_plot(), width = 6, height = 4.5)
 ``` 
 
 ## M3
