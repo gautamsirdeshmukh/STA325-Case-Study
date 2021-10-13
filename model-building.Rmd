@@ -337,7 +337,7 @@ final
 ggplot() +
   geom_line(data = final %>% filter(seed > 0), 
             mapping = aes(x = poly, y = cv_rss, color = seed, alpha = 0.5)) +
-  scale_color_manual(values = c(rep("black", 20))) +
+  scale_color_manual(values = c(rep("black", 30))) +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = poly, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
