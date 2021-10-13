@@ -124,6 +124,34 @@ ggplot(data = train1, mapping = aes(x = St*Re*Fr_sigmoid, y = M2)) +
   theme_minimal()
 ```
 
+```{r}
+ggplot(data = train1, mapping = aes(x = log(M1))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda_log_M1.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(M2))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda_log_M2.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(M3))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda_log_M3.png", plot = last_plot(), width = 4.5, height = 3)
+ggplot(data = train1, mapping = aes(x = log(M4))) + 
+  geom_histogram(fill = "skyblue", color = "white") +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_minimal()
+ggsave("./plots/eda_log_M4.png", plot = last_plot(), width = 4.5, height = 3)
+```
+
+
 We will try to create these 4 models:
 
 - **Response**: M1 & **Predictors (Main Effects)**: St, Re, Fr_sigmoid
@@ -362,7 +390,8 @@ ggplot() +
   labs(title = "CV Error (All Iterations)",
        y = "CV Error",
        x = "Polynomial Degree",
-       caption = "The thick line is the average across all CV iterations (thin lines).") +
+       caption = "The thick line is the average across all CV iterations (thin lines).",
+       subtitle = "Predicting log(M1)") +
   scale_x_continuous(breaks = seq(1, 11, by = 1)) +
   scale_y_continuous() +
   theme_minimal(base_size = 10) +
@@ -383,7 +412,8 @@ ggplot(final_summary, aes(x = poly, y = cv_error_5_1e)) +
   labs(title = "CV Error (Average)",
        y = "CV Error (Average)",
        x = "Polynomial Degree",
-       caption = "We zoomed in to focus only on the thick line - the average CV for all 100 iterations.") +
+       caption = "We zoomed in to focus only on the thick line - the average CV for all 100 iterations.",
+       subtitle = "Predicting log(M1)") +
   theme_minimal(base_size = 10) +
   theme(plot.caption = element_text(hjust = 0.5))
 #ggsave("./plots/cv_err_model1_average.png", plot = last_plot(), width = 6, height = 4)
@@ -702,6 +732,7 @@ ggplot() +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
+       subtitle = "Predicting log(M2)",
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
@@ -783,6 +814,7 @@ ggplot() +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
+       subtitle = "Predicting log(M3)",
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
@@ -841,6 +873,7 @@ ggplot() +
   geom_line(data = final %>% filter(seed == 0),
             mapping = aes(x = df, y = cv_rss, alpha = 1), color = "black") +
   labs(title = "CV Error",
+       subtitle = "Predicting log(M4)",
        y = "CV Error",
        x = "Degrees of Freedom") +
   scale_x_continuous(breaks = seq(1, 35, by = 2)) +
