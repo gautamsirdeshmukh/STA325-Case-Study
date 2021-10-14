@@ -10,7 +10,7 @@ output:
     latex_engine: xelatex
 
 ---
-```{r setup, include=FALSE, echo=FALSE}
+```{r setup, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 <style type="text/css">
@@ -94,11 +94,11 @@ test1
 
 
 
-![Predicting Raw Moment 1](./plots/cv_err_model1.png){#id .class width=50% height=50%}
-![Predicting Raw Moment 1 (close zoom)](./plots/cv_err_model1_average.png){#id .class width=50% height=50%}
-![Predicting Raw Moment 2](./plots/cv_err_model2_spline.png){#id .class width=40% height=40%}
-![Predicting Raw Moment 3](./plots/cv_err_model3_spline.png){#id .class width=40% height=40%}
-![Predicting Raw Moment 4](./plots/cv_err_model4_spline.png){#id .class width=40% height=40%}
+![Predicting Raw Moment 1](./plots/cv_err_model1.png){#id .class width=40% height=40%}
+![Predicting Raw Moment 1 (close zoom)](./plots/cv_err_model1_average.png){#id .class width=40% height=40%}
+![Predicting Raw Moment 2](./plots/cv_err_model2_spline.png){#id .class width=33% height=33%}
+![Predicting Raw Moment 3](./plots/cv_err_model3_spline.png){#id .class width=33% height=33%}
+![Predicting Raw Moment 4](./plots/cv_err_model4_spline.png){#id .class width=33% height=33%}
 
 ### Results
 
@@ -107,7 +107,6 @@ test1
 ```{r}
 M1 <- lm(log(M1) ~ St + Re_categorical + Fr_categorical, data = train1)
 summary(M1)
-plot(M1)
 ```
 
 
@@ -134,9 +133,11 @@ summary(M4)
 ```
 
 ```{r, warning=FALSE}
-M1_Predict <- as.data.frame(predict(M1, test1)) %>%
+M1_Predict <- as.data.frame(predict(M1, test1))
+M1_Predict <- M1_Predict %>%
   mutate(fit.exp = exp(M1_Predict$`predict(M1, test1)`))
-M2_Predict <- as.data.frame(predict(M2, test1)) %>%
+M2_Predict <- as.data.frame(predict(M2, test1))
+M2_Predict <- M2_Predict %>%
   mutate(M2_exp = exp(M2_Predict$`predict(M2, test1)`))
 M3_Predict <- as.data.frame(predict(M3, test1))
 M3_Predict <- M3_Predict %>%
@@ -157,3 +158,17 @@ write_csv(data_test_prediction,"data_test_prediction.csv")
 
 
 ### Conclusion
+
+
+### Appendix
+
+Appendix 1
+
+
+```{r fig.width=6, fig.height=6}
+plot(M1, which = 1)
+plot(M1, which = 2)
+plot(M1, which = 3)
+plot(M1, which = 4)
+```
+
