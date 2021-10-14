@@ -132,6 +132,27 @@ M4 <- gam(log(M4) ~ s(St, df = 9) + Re_categorical + Fr_categorical +
 summary(M4)
 ```
 
+```{r}
+M2.resid <- resid(M2)
+M2.fitted <- fitted(M2)
+M2_resid_vs_fitted <- data.frame(M2.fitted,M2.resid) 
+M2_resid_vs_fitted %>%
+  ggplot(mapping = aes(x = M2.fitted, y = M2.resid)) +
+  geom_point() + geom_smooth() + labs(title = "M2 Diagnostics fitted vs resid") + theme_minimal()
+M3.resid <- resid(M3)
+M3.fitted <- fitted(M3)
+M3_resid_vs_fitted <- data.frame(M3.fitted,M3.resid) 
+M3_resid_vs_fitted %>%
+  ggplot(mapping = aes(x = M3.fitted, y = M3.resid)) +
+  geom_point() + geom_smooth() + labs(title = "M3 Diagnostics fitted vs resid") + theme_minimal()
+M4.resid <- resid(M4)
+M4.fitted <- fitted(M4)
+M4_resid_vs_fitted <- data.frame(M4.fitted,M4.resid) 
+M4_resid_vs_fitted %>%
+  ggplot(mapping = aes(x = M4.fitted, y = M4.resid)) +
+  geom_point() + geom_smooth() + labs(title = "M4 Diagnostics fitted vs resid") + theme_minimal()
+```
+
 ```{r, warning=FALSE}
 M1_Predict <- as.data.frame(predict(M1, test1))
 M1_Predict <- M1_Predict %>%
